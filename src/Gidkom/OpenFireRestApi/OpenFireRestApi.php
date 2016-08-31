@@ -82,6 +82,18 @@ class OpenFireRestApi
     	$endpoint = '/users';        
     	return $this->doRequest('get',$endpoint);
     }
+	
+    /**
+     * Get a list of registered users
+	 *
+     * @param  array   $params       Parameters
+     * @return array                 Array containing 'status' (true on success) and 'message' the answer as an array
+     */
+    public function getUsers($queryParams)
+    {
+    	$endpoint = '/users';        
+    	return $this->doRequest('get',$endpoint, $queryParams);
+    }
 
     /**
      * Get information for a specified user
@@ -264,7 +276,6 @@ class OpenFireRestApi
      *
      * @param   string      $name               Name of group
      * @param   string      $description        Some description of the group
-     *
      * @return array                            Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function updateGroup($name,  $description)
