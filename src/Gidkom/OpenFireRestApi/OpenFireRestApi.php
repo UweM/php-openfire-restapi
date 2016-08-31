@@ -30,7 +30,7 @@ class OpenFireRestApi
      * @param   string          $type           Request method
      * @param   string          $endpoint       Api request endpoint
      * @param   array           $params         Parameters
-     * @return  array|false                     Array with data or error, or False when something went fully wrong
+     * @return  array                           Array containing 'status' (true on success) and 'message' the answer as an array
      */
     
     private function doRequest($type, $endpoint, $params=array())
@@ -69,14 +69,13 @@ class OpenFireRestApi
             return array('status'=>true, 'message'=>json_decode($result->getBody()));
         }
         return array('status'=>false, 'message'=>json_decode($result->getBody()));
-    	
     }
     
 
     /**
      * Get all registered users
      *
-     * @return json|false       Json with data or error, or False when something went fully wrong
+     * @return array             Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function getUsers()
     {
@@ -84,11 +83,10 @@ class OpenFireRestApi
     	return $this->doRequest('get',$endpoint);
     }
 
-
     /**
      * Get information for a specified user
      *
-     * @return json|false       Json with data or error, or False when something went fully wrong
+     * @return array       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function getUser($username)
     {
@@ -105,7 +103,7 @@ class OpenFireRestApi
      * @param   string|false    $name       Name    (Optional)
      * @param   string|false    $email      Email   (Optional)
      * @param   string[]|false  $groups     Groups  (Optional)
-     * @return  json|false                 Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function addUser($username, $password, $name=false, $email=false, $groups=false)
     {
@@ -118,7 +116,7 @@ class OpenFireRestApi
      * Deletes an OpenFire user
      *
      * @param   string          $username   Username
-     * @return  json|false                 Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function deleteUser($username)
     {
@@ -134,7 +132,7 @@ class OpenFireRestApi
      * @param   string|false    $name       Name (Optional)
      * @param   string|false    $email      Email (Optional)
      * @param   string[]|false  $groups     Groups (Optional)
-     * @return  json|false                 Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function updateUser($username, $password, $name=false, $email=false, $groups=false)
     {
@@ -146,7 +144,7 @@ class OpenFireRestApi
      * locks/Disables an OpenFire user
      *
      * @param   string          $username   Username
-     * @return  json|false                 Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function lockoutUser($username)
     {
@@ -159,7 +157,7 @@ class OpenFireRestApi
      * unlocks an OpenFire user
      *
      * @param   string          $username   Username
-     * @return  json|false                 Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function unlockUser($username)
     {
@@ -175,7 +173,7 @@ class OpenFireRestApi
      * @param   string          $jid            JID
      * @param   string|false    $name           Name         (Optional)
      * @param   int|false       $subscription   Subscription (Optional)
-     * @return  json|false                     Json with data or error, or False when something went fully wrong
+     * @return  array                           Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function addToRoster($username, $jid, $name=false, $subscription=false)
     {
@@ -189,7 +187,7 @@ class OpenFireRestApi
      *
      * @param   string          $username   Username
      * @param   string          $jid        JID
-     * @return  json|false                 Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function deleteFromRoster($username, $jid)
     {
@@ -201,10 +199,10 @@ class OpenFireRestApi
      * Updates this OpenFire user's roster
      *
      * @param   string          $username           Username
-     * @param   string          $jid                 JID
+     * @param   string          $jid                JID
      * @param   string|false    $nickname           Nick Name (Optional)
      * @param   int|false       $subscriptionType   Subscription (Optional)
-     * @return  json|false                          Json with data or error, or False when something went fully wrong
+     * @return  array                               Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function updateRoster($username, $jid, $nickname=false, $subscriptionType=false)
     {
@@ -215,7 +213,7 @@ class OpenFireRestApi
     /**
      * Get all groups
      *
-     * @return  json|false      Json with data or error, or False when something went fully wrong
+     * @return  array                       Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function getGroups()
     {
@@ -227,7 +225,7 @@ class OpenFireRestApi
      *  Retrieve a group
      *
      * @param  string   $name                       Name of group
-     * @return  json|false                          Json with data or error, or False when something went fully wrong
+     * @return array                                Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function getGroup($name)
     {
@@ -241,7 +239,7 @@ class OpenFireRestApi
      * @param   string   $name                      Name of the group
      * @param   string   $description               Some description of the group
      *
-     * @return  json|false                          Json with data or error, or False when something went fully wrong
+     * @return  array                               Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function createGroup($name, $description = false)
     {
@@ -253,7 +251,7 @@ class OpenFireRestApi
      * Delete a group
      *
      * @param   string      $name               Name of the Group to delete
-     * @return  json|false                          Json with data or error, or False when something went fully wrong
+     * @return  array                           Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function deleteGroup($name)
     {
@@ -267,6 +265,7 @@ class OpenFireRestApi
      * @param   string      $name               Name of group
      * @param   string      $description        Some description of the group
      *
+     * @return array                            Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function updateGroup($name,  $description)
     {
@@ -277,7 +276,7 @@ class OpenFireRestApi
     /**
      * Gell all active sessions
      *
-     * @return json|false       Json with data or error, or False when something went fully wrong
+     * @return array                            Array containing 'status' (true on success) and 'message' the answer as an array
      */
     public function getSessions()
     {
