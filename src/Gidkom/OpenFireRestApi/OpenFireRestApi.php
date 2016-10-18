@@ -37,11 +37,13 @@ class OpenFireRestApi
      * @param   string          $type           Request method
      * @param   string          $endpoint       Api request endpoint
      * @param   string          $resultType     Type of the expected result objects
+     * @param   boolean         $resultIsArray  True if the expected result is a collection
+     * @param   Object          $object         Object to post or put
      * @param   array           $params         Parameters
      * @return  array                           Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
      */
     
-    private function doRequest($type, $endpoint, $resultType = '', $resultIsArray = TRUE, $params=array())
+    private function doRequest($type, $endpoint, $resultType = '', $resultIsArray = TRUE, $object=NULL, $params=array())
     {
     	$base = ($this->useSSL) ? "https" : "http";
     	$url = $base . "://" . $this->host . ":" .$this->port.$this->plugin.$endpoint;
@@ -50,23 +52,23 @@ class OpenFireRestApi
   			'Authorization' => $this->secret
   		);
 
-        $body = json_encode($params);
+        $body = json_encode($object);
 		
         switch ($type) {
             case 'get':
-                $result = $this->client->get($url, compact('headers'));
+                $result = $this->client->get($url, ['headers' => $headers, 'query'=>$params] );
                 break;
             case 'post':
                 $headers += ['Content-Type'=>'application/json'];
-                $result = $this->client->post($url, compact('headers','body'));
+                $result = $this->client->post($url, ['headers'=>$headers, 'body'=>$body, 'query'=>$params]);
                 break;
             case 'delete':
                 $headers += ['Content-Type'=>'application/json'];
-                $result = $this->client->delete($url, compact('headers','body'));
+                $result = $this->client->delete($url, ['headers' => $headers, 'query'=>$params]);
                 break;
             case 'put':
                 $headers += ['Content-Type'=>'application/json'];
-                $result = $this->client->put($url, compact('headers','body'));
+                $result = $this->client->put($url, ['headers'=>$headers, 'body'=>$body, 'query'=>$params]);
                 break;
             default:
                 $result = null;
@@ -162,7 +164,7 @@ class OpenFireRestApi
 	 */
 	public function getChatRooms( $servicename = 'conference') {
         $endpoint = '/chatrooms'; 
-        return $this->doRequest('get', $endpoint, ChatRoom::class, TRUE, array('servicename' => $servicename));
+        return $this->doRequest('get', $endpoint, ChatRoom::class, TRUE, NULL, array('servicename' => $servicename));
 	}
 
 	/**
@@ -172,7 +174,7 @@ class OpenFireRestApi
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
 	 */
 	public function getChatRoom($chatroomName, $servicename = 'conference') {
-        $endpoint = '/chatrooms/'.$roomName; 
+        $endpoint = '/chatrooms/'.$chatroomName; 
         return $this->doRequest('get', $endpoint, ChatRoom::class, FALSE, NULL, array('servicename' => $servicename));
 	}
 
@@ -183,7 +185,7 @@ class OpenFireRestApi
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
 	 */
 	public function createChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
-        $endpoint = '/chatrooms/'.$chatroom->roomName; 
+        $endpoint = '/chatrooms/'.$chatroom->name; 
         return $this->doRequest('post', $endpoint, '', FALSE, $chatroom, array('servicename' => $servicename) );
 	}
 
@@ -194,7 +196,7 @@ class OpenFireRestApi
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
 	 */
 	public function updateChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
-        $endpoint = '/chatrooms/'.$chatroom->roomName; 
+        $endpoint = '/chatrooms/'.$chatroom->name; 
         return $this->doRequest('put', $endpoint, '', FALSE, $chatroom, array('servicename' => $servicename) );
 	}
 
@@ -206,7 +208,7 @@ class OpenFireRestApi
 	 */
 	public function deleteChatRoom($roomName, $servicename = 'conference') {
         $endpoint = '/chatrooms/'.$roomName; 
-        return $this->doRequest('delete', $endpoint, FALSE, $chatroom, array('servicename' => $servicename) );
+        return $this->doRequest('delete', $endpoint, '', FALSE, NULL, array('servicename' => $servicename) );
 	}
 
 
@@ -242,7 +244,7 @@ class OpenFireRestApi
      */
     public function createGroup( Group $group )
     {
-        $endpoint = '/groups/';
+        $endpoint = '/groups/'.$group->name;
         return $this->doRequest('post', $endpoint, '', FALSE, $group);
     }
 
@@ -309,7 +311,7 @@ class OpenFireRestApi
     public function addGroupToChatRoomRole($groupname, $role, $roomname, $servicename = 'conference')
     {
         $endpoint = '/chatrooms/'.$roomname.'/'.$role.'/group/'.$groupname;
-        return $this->doRequest('post', $endpoint, '', FALSE, array('servicename' => $servicename) );
+        return $this->doRequest('post', $endpoint, '', FALSE, NULL, array('servicename' => $servicename) );
     }
 	
     /**
@@ -324,7 +326,7 @@ class OpenFireRestApi
     public function removeGroupFromChatRoomRole($groupname, $role, $roomname, $servicename = 'conference')
     {
         $endpoint = '/chatrooms/'.$roomname.'/'.$role.'/group/'.$groupname;
-        return $this->doRequest('delete', $endpoint, '', FALSE, array('servicename' => $servicename) );
+        return $this->doRequest('delete', $endpoint, '', FALSE, NULL, array('servicename' => $servicename) );
     }
 	
     /**
@@ -339,7 +341,7 @@ class OpenFireRestApi
     public function addToRoster($username, $jid, $name=false, $subscription=false)
     {
         $endpoint = '/users/'.$username.'/roster';
-        return $this->doRequest('post', $endpoint, compact('jid','name','subscription'));
+        return $this->doRequest('post', $endpoint, NULL, compact('jid','name','subscription'));
     }
 
 
@@ -368,7 +370,7 @@ class OpenFireRestApi
     public function updateRoster($username, $jid, $nickname=false, $subscriptionType=false)
     {
         $endpoint = '/users/'.$username.'/roster/'.$jid;
-        return $this->doRequest('put', $endpoint, $jid, compact('jid','username','subscriptionType'));     
+        return $this->doRequest('put', $endpoint, $jid, NULL, compact('jid','username','subscriptionType'));     
     }
     /**
      * Gell all active sessions
