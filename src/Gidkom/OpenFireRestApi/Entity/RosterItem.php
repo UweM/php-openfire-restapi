@@ -2,6 +2,6 @@
 	
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class RosterItem
+class RosterItem implements \JsonSerializable
 {
 }

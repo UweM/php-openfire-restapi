@@ -2,7 +2,7 @@
 	
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class Group
+class Group implements \JsonSerializable
 {
 	public $name          = '';
 	public $description   = '';

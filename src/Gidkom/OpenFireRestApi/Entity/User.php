@@ -2,7 +2,7 @@
 	
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class User implements JsonSerializable
+class User implements \JsonSerializable
 {
 	public $username          = '';
 	public $name              = '';

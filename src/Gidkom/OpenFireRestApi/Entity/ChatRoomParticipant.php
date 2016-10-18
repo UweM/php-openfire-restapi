@@ -2,7 +2,7 @@
 	
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class ChatRoomParticipant implements JsonSerializable
+class ChatRoomParticipant implements \JsonSerializable
 {
 	public $jid              = '';
 	public $role             = '';

@@ -2,7 +2,7 @@
 	
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class ChatRoom implements JsonSerializable
+class ChatRoom implements \JsonSerializable
 {
 	public $roomName                        = ''; 
 	public $naturalName                     = ''; 
