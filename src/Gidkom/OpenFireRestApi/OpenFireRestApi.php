@@ -185,7 +185,7 @@ class OpenFireRestApi
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
 	 */
 	public function createChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
-        $endpoint = '/chatrooms/'.$chatroom->name; 
+        $endpoint = '/chatrooms'; 
         return $this->doRequest('post', $endpoint, '', FALSE, $chatroom, array('servicename' => $servicename) );
 	}
 
