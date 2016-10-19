@@ -130,7 +130,7 @@ class OpenFireRestApi
      */
     public function createUser(User $user)
     {
-        $endpoint = '/users/' . $user->username; 
+        $endpoint = '/users'; 
         return $this->doRequest('post', $endpoint, '', FALSE, $user );
     }
 
@@ -244,7 +244,7 @@ class OpenFireRestApi
      */
     public function createGroup( Group $group )
     {
-        $endpoint = '/groups/'.$group->name;
+        $endpoint = '/groups';
         return $this->doRequest('post', $endpoint, '', FALSE, $group);
     }
 
