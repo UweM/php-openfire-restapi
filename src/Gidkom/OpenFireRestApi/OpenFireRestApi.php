@@ -53,25 +53,35 @@ class OpenFireRestApi
   		);
 
         $body = json_encode($object);
-        switch ($type) {
-            case 'get':
-                $result = $this->client->get   ($url, ['http_errors'=>false, 'headers'=>$headers, 'query'=>$params] );
-                break;
-            case 'put':
-                $headers += ['Content-Type'=>'application/json'];
-                $result = $this->client->put   ($url, ['http_errors'=>false, 'headers'=>$headers, 'query'=>$params, 'body'=>$body]);
-                break;
-            case 'post':
-                $headers += ['Content-Type'=>'application/json'];
-                $result = $this->client->post  ($url, ['http_errors'=>false, 'headers'=>$headers, 'query'=>$params, 'body'=>$body]);
-                break;
-            case 'delete':
-                $headers += ['Content-Type'=>'application/json'];
-                $result = $this->client->delete($url, ['http_errors'=>false, 'headers'=>$headers, 'query'=>$params]);
-                break;
-            default:
-                $result = null;
-                break;
+        try
+        {
+            switch ($type) {
+                case 'get':
+                    $result = $this->client->get   ($url, ['headers'=>$headers, 'query'=>$params] );
+                    break;
+                case 'put':
+                    $headers += ['Content-Type'=>'application/json'];
+                    $result = $this->client->put   ($url, ['headers'=>$headers, 'query'=>$params, 'body'=>$body]);
+                    break;
+                case 'post':
+                    $headers += ['Content-Type'=>'application/json'];
+                    $result = $this->client->post  ($url, ['headers'=>$headers, 'query'=>$params, 'body'=>$body]);
+                    break;
+                case 'delete':
+                    $headers += ['Content-Type'=>'application/json'];
+                    $result = $this->client->delete($url, ['headers'=>$headers, 'query'=>$params]);
+                    break;
+                default:
+                    $result = null;
+                    break;
+            }
+        } catch ( \GuzzleHttp\Exception\ClientException $e ) {
+            if ( $e->getResponse()->getStatusCode() == 404 && $type === 'get' ) {
+                // Non existing GET is a success that returns null
+                return array('status'=>true, 'result'=>null, 'error'=>null);
+            }
+            // Every other error is unexpected
+            throw $e;
         }
         
         if ($result->getStatusCode() == 200 || $result->getStatusCode() == 201) {
@@ -94,11 +104,7 @@ class OpenFireRestApi
 			} else {
 				return array('status'=>true, 'result'=>json_decode($result->getBody()), 'error'=>null);
 			}
-        } else if ($result->getStatusCode() == 404 && $type === 'get' ) {
-            // Non existing GET is a success that returns null
-			return array('status'=>true, 'result'=>null, 'error'=>null);
         }
-		
         return array('status'=>false, 'result'=>null, 'error'=>json_decode($result->getBody()));
     }
 	
