@@ -81,9 +81,9 @@ class ChatRoom implements \JsonSerializable
     
 	public function jsonSerialize () {
         $Result = array(
-            'roomName'     => $this->roomName    ; 
-            'naturalName'  => $this->naturalName ; 
-            'description'  => $this->description ; 
+            'roomName'     => $this->roomName    , 
+            'naturalName'  => $this->naturalName , 
+            'description'  => $this->description , 
         );
             
         if( $this->password                  !== NULL ) { $Result[ 'password'                  ] = $this->password                     ; }
@@ -107,8 +107,7 @@ class ChatRoom implements \JsonSerializable
         if( $this->admins                    !== NULL ) { $Result[ 'admins'                    ] = array( 'admin'                 => $this->admins                 ); }
         if( $this->members                   !== NULL ) { $Result[ 'members'                   ] = array( 'member'                => $this->members                ); }
         if( $this->outcasts                  !== NULL ) { $Result[ 'outcasts'                  ] = array( 'outcast'               => $this->outcasts               ); }
-		);
-        
+		
         return $Result;
 	}
 	
