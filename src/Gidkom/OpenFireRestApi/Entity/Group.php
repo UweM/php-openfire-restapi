@@ -20,10 +20,16 @@ class Group implements \JsonSerializable
 	public function setMembers      ( $members     ) { $this->members     = $members     ; }
     
 	public function jsonSerialize () {
-        return array(
+        
+        $Result = array(
 			'name'          => $this->name,
 			'description'   => $this->description,
-		);
+        );
+                
+        if( $this->admins                   !== NULL ) { $Result[ 'admins'                   ] = array( 'admins'                => $this->admins                ); }
+        if( $this->members                  !== NULL ) { $Result[ 'members'                  ] = array( 'members'               => $this->members               ); }
+		
+        return $Result;
 	}
 	
 	public function jsonDeserialize ( $array ) {
