@@ -1,5 +1,5 @@
 <?php
-	
+    
 namespace Gidkom\OpenFireRestApi;
 
 use GuzzleHttp\Client;
@@ -13,11 +13,11 @@ use Gidkom\OpenFireRestApi\Entity\User;
 
 class OpenFireRestApi
 {
-    public $host		= 'localhost';
-	public $port		= '9090';
-	public $plugin		= '/plugins/restapi/v1';
-	public $secret		= 'SuperSecret';
-	public $useSSL		= false;
+    public $host        = 'localhost';
+    public $port        = '9090';
+    public $plugin      = '/plugins/restapi/v1';
+    public $secret      = 'SuperSecret';
+    public $useSSL      = false;
     protected $params   = array();
     public $client;
 
@@ -45,12 +45,12 @@ class OpenFireRestApi
     
     private function doRequest($type, $endpoint, $resultType = '', $resultIsArray = TRUE, $object=NULL, $params=array())
     {
-    	$base = ($this->useSSL) ? "https" : "http";
-    	$url = $base . "://" . $this->host . ":" .$this->port.$this->plugin.$endpoint;
-    	$headers = array(
-  			'Accept' => 'application/json',
-  			'Authorization' => $this->secret
-  		);
+        $base = ($this->useSSL) ? "https" : "http";
+        $url = $base . "://" . $this->host . ":" .$this->port.$this->plugin.$endpoint;
+        $headers = array(
+            'Accept' => 'application/json',
+            'Authorization' => $this->secret
+        );
 
         $body = json_encode($object);
         try
@@ -85,38 +85,38 @@ class OpenFireRestApi
         }
         
         if ($result->getStatusCode() == 200 || $result->getStatusCode() == 201) {
-			
-			if($resultType) {
-				$result_array = json_decode($result->getBody(), TRUE);
-				$result_objects = array();
-				if($resultIsArray) {
-					foreach($result_array as $item) {
-						$newobject = new $resultType();
-						$newobject->jsonDeserialize($item);
-						$result_objects[] = $newobject;
-					}
-				} else {
-					$newobject = new $resultType();
-					$newobject->jsonDeserialize($result_array);
-					$result_objects[] = $newobject;
-				}
-				return array('status'=>true, 'result'=>$result_objects, 'error'=>null);
-			} else {
-				return array('status'=>true, 'result'=>json_decode($result->getBody()), 'error'=>null);
-			}
+            
+            if($resultType) {
+                $result_array = json_decode($result->getBody(), TRUE);
+                $result_objects = array();
+                if($resultIsArray) {
+                    foreach($result_array as $item) {
+                        $newobject = new $resultType();
+                        $newobject->jsonDeserialize($item);
+                        $result_objects[] = $newobject;
+                    }
+                } else {
+                    $newobject = new $resultType();
+                    $newobject->jsonDeserialize($result_array);
+                    $result_objects[] = $newobject;
+                }
+                return array('status'=>true, 'result'=>$result_objects, 'error'=>null);
+            } else {
+                return array('status'=>true, 'result'=>json_decode($result->getBody()), 'error'=>null);
+            }
         }
         return array('status'=>false, 'result'=>null, 'error'=>json_decode($result->getBody()));
     }
-	
+    
     /**
      * Get a list of registered users
-	 *
+     *
      * @return array                 Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
      */
     public function getUsers()
     {
-    	$endpoint = '/users';        
-    	return $this->doRequest('get',$endpoint, User::class, TRUE);
+        $endpoint = '/users';        
+        return $this->doRequest('get',$endpoint, User::class, TRUE);
     }
 
     /**
@@ -143,16 +143,16 @@ class OpenFireRestApi
         return $this->doRequest('post', $endpoint, '', FALSE, $user );
     }
 
-	/**
-	 * Update user.
-	 *
+    /**
+     * Update user.
+     *
      * @param   User            $user       User to update
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
-	 */
-	public function updateUser(User $user) {
+     */
+    public function updateUser(User $user) {
         $endpoint = '/users/' . $user->username; 
         return $this->doRequest('put', $endpoint, '', FALSE, $user );
-	}
+    }
 
     /**
      * Deletes an OpenFire user
@@ -165,60 +165,60 @@ class OpenFireRestApi
         $endpoint = '/users/'.$username; 
         return $this->doRequest('delete', $endpoint);
     }
-	
-	/**
-	 * Gets chat rooms.
-	 *
+    
+    /**
+     * Gets chat rooms.
+     *
      * @return  array                        Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
-	 */
-	public function getChatRooms( $servicename = 'conference') {
+     */
+    public function getChatRooms( $servicename = 'conference') {
         $endpoint = '/chatrooms'; 
         return $this->doRequest('get', $endpoint, ChatRoom::class, TRUE, NULL, array('servicename' => $servicename));
-	}
+    }
 
-	/**
-	 * Gets the chat room.
-	 *
-	 * @param   string     $roomName        the room name
+    /**
+     * Gets the chat room.
+     *
+     * @param   string     $roomName        the room name
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
-	 */
-	public function getChatRoom($chatroomName, $servicename = 'conference') {
+     */
+    public function getChatRoom($chatroomName, $servicename = 'conference') {
         $endpoint = '/chatrooms/'.$chatroomName; 
         return $this->doRequest('get', $endpoint, ChatRoom::class, FALSE, NULL, array('servicename' => $servicename));
-	}
+    }
 
-	/**
-	 * Creates the chat room.
-	 *
-	 * @param   ChatRoom     $chatroom      the room 
+    /**
+     * Creates the chat room.
+     *
+     * @param   ChatRoom     $chatroom      the room 
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
-	 */
-	public function createChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
+     */
+    public function createChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
         $endpoint = '/chatrooms'; 
         return $this->doRequest('post', $endpoint, '', FALSE, $chatroom, array('servicename' => $servicename) );
-	}
+    }
 
-	/**
-	 * Update chat room.
-	 *
-	 * @param   ChatRoom     $chatroom      the room
+    /**
+     * Update chat room.
+     *
+     * @param   ChatRoom     $chatroom      the room
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
-	 */
-	public function updateChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
+     */
+    public function updateChatRoom(ChatRoom $chatroom, $servicename = 'conference') {
         $endpoint = '/chatrooms/'.$chatroom->name; 
         return $this->doRequest('put', $endpoint, '', FALSE, $chatroom, array('servicename' => $servicename) );
-	}
+    }
 
-	/**
-	 * Delete chat room.
-	 *
-	 * @param   string     $roomName        the room name
+    /**
+     * Delete chat room.
+     *
+     * @param   string     $roomName        the room name
      * @return  array                       Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
-	 */
-	public function deleteChatRoom($roomName, $servicename = 'conference') {
+     */
+    public function deleteChatRoom($roomName, $servicename = 'conference') {
         $endpoint = '/chatrooms/'.$roomName; 
         return $this->doRequest('delete', $endpoint, '', FALSE, NULL, array('servicename' => $servicename) );
-	}
+    }
 
 
     /**
@@ -294,7 +294,7 @@ class OpenFireRestApi
         $endpoint = '/users/'.$username.'/groups/'.$groupname;
         return $this->doRequest('post', $endpoint);
     }
-	
+    
     /**
      * Removes user from this group
      *
@@ -307,7 +307,7 @@ class OpenFireRestApi
         $endpoint = '/users/'.$username.'/groups/'.$groupname;
         return $this->doRequest('delete', $endpoint);
     }
-	
+    
     /**
      * Add group with role to chat room
      *
@@ -322,7 +322,7 @@ class OpenFireRestApi
         $endpoint = '/chatrooms/'.$roomname.'/'.$role.'/group/'.$groupname;
         return $this->doRequest('post', $endpoint, '', FALSE, NULL, array('servicename' => $servicename) );
     }
-	
+    
     /**
      * Remove group with role to chat room
      *
@@ -337,7 +337,7 @@ class OpenFireRestApi
         $endpoint = '/chatrooms/'.$roomname.'/'.$role.'/group/'.$groupname;
         return $this->doRequest('delete', $endpoint, '', FALSE, NULL, array('servicename' => $servicename) );
     }
-	
+    
     /**
      * Adds to this OpenFire user's roster
      *
@@ -391,7 +391,7 @@ class OpenFireRestApi
         $endpoint = '/sessions';
         return $this->doRequest('get', $endpoint);
     }
-	
+    
      /**
      * locks/Disables an OpenFire user
      *
