@@ -28,6 +28,10 @@ class ChatRoom implements \JsonSerializable
 	private $admins                          = NULL;
 	private $members                         = NULL; 
 	private $outcasts                        = NULL;
+	private $ownerGroups                     = NULL; 
+	private $adminGroups                     = NULL;
+	private $memberGroups                    = NULL; 
+	private $outcastGroups                   = NULL;
 	
 	public function getRoomName                  () { return $this->roomName                   ; }
 	public function getNaturalName               () { return $this->naturalName                ; }
@@ -53,6 +57,10 @@ class ChatRoom implements \JsonSerializable
 	public function getAdmins                    () { return $this->admins                     ; }
 	public function getMembers                   () { return $this->members                    ; }
 	public function getOutcasts                  () { return $this->outcasts                   ; }
+	public function getOwnerGroups               () { return $this->ownerGroups                ; }
+	public function getAdminGroups               () { return $this->adminGroups                ; }
+	public function getMemberGroups              () { return $this->memberGroups               ; }
+	public function getOutcastGroups             () { return $this->outcastGroups              ; }
         
 	public function setRoomName                  ( $roomName                  ) { $this->roomName                  = $roomName                  ; }
 	public function setNaturalName               ( $naturalName               ) { $this->naturalName               = $naturalName               ; }
@@ -78,6 +86,10 @@ class ChatRoom implements \JsonSerializable
 	public function setAdmins                    ( $admins                    ) { $this->admins                    = $admins                    ; }
 	public function setMembers                   ( $members                   ) { $this->members                   = $members                   ; }
 	public function setOutcasts                  ( $outcasts                  ) { $this->outcasts                  = $outcasts                  ; }
+	public function setOwnerGroups               ( $ownerGroups               ) { $this->ownerGroups               = $ownerGroups               ; }
+	public function setAdminGroups               ( $adminGroups               ) { $this->adminGroups               = $adminGroups               ; }
+	public function setMemberGroups              ( $memberGroups              ) { $this->memberGroups              = $memberGroups              ; }
+	public function setOutcastGroups             ( $outcastGroups             ) { $this->outcastGroups             = $outcastGroups             ; }
     
 	public function jsonSerialize () {
         $Result = array(
@@ -102,11 +114,18 @@ class ChatRoom implements \JsonSerializable
         if( $this->loginRestrictedToNickname !== NULL ) { $Result[ 'loginRestrictedToNickname' ] = $this->loginRestrictedToNickname    ; }
         if( $this->membersOnly               !== NULL ) { $Result[ 'membersOnly'               ] = $this->membersOnly                  ; }
         if( $this->moderated                 !== NULL ) { $Result[ 'moderated'                 ] = $this->moderated                    ; }
+
         if( $this->broadcastPresenceRoles    !== NULL ) { $Result[ 'broadcastPresenceRoles'    ] = array( 'broadcastPresenceRole' => $this->broadcastPresenceRoles ); }
+
         if( $this->owners                    !== NULL ) { $Result[ 'owners'                    ] = array( 'owner'                 => $this->owners                 ); }
         if( $this->admins                    !== NULL ) { $Result[ 'admins'                    ] = array( 'admin'                 => $this->admins                 ); }
         if( $this->members                   !== NULL ) { $Result[ 'members'                   ] = array( 'member'                => $this->members                ); }
         if( $this->outcasts                  !== NULL ) { $Result[ 'outcasts'                  ] = array( 'outcast'               => $this->outcasts               ); }
+		        
+        if( $this->ownerGroups               !== NULL ) { $Result[ 'ownerGroups'               ] = array( 'ownerGroup'            => $this->ownerGroups            ); }
+        if( $this->adminGroups               !== NULL ) { $Result[ 'adminGroups'               ] = array( 'adminGroup'            => $this->adminGroups            ); }
+        if( $this->memberGroups              !== NULL ) { $Result[ 'memberGroups'              ] = array( 'memberGroup'           => $this->memberGroups           ); }
+        if( $this->outcastGroups             !== NULL ) { $Result[ 'outcastGroups'             ] = array( 'outcastGroup'          => $this->outcastGroups          ); }
 		
         return $Result;
 	}
@@ -171,5 +190,40 @@ class ChatRoom implements \JsonSerializable
 			     if ( is_array(  $outcast ) ) { $this->outcasts = $outcast;        } 
             else if ( is_string( $outcast ) ) { $this->outcasts = array($outcast); }
 		}
+        
+		
+		$this->ownerGroups = array();
+		$ownerGroups = $array['ownerGroups'];
+		if( $ownerGroups ) {
+			$ownerGroup = $ownerGroups['ownerGroup'];
+			     if ( is_array(  $ownerGroup ) ) { $this->ownerGroups = $ownerGroup;        } 
+            else if ( is_string( $ownerGroup ) ) { $this->ownerGroups = array($ownerGroup); }
+		}
+        
+		$this->adminGroups = array();
+		$adminGroups = $array['adminGroups'];
+		if( $adminGroups ) {
+			$adminGroup = $adminGroups['adminGroup'];
+			     if ( is_array(  $adminGroup ) ) { $this->adminGroups = $adminGroup;        } 
+            else if ( is_string( $adminGroup ) ) { $this->adminGroups = array($adminGroup); }
+		}
+        
+		$this->memberGroups = array();
+		$memberGroups = $array['membersGroup'];
+		if( $memberGroups ) {
+			$memberGroup = $memberGroups['memberGroup'];
+			     if ( is_array(  $memberGroup ) ) { $this->memberGroups = $memberGroup;        } 
+            else if ( is_string( $memberGroup ) ) { $this->memberGroups = array($memberGroup); }
+		}
+        
+		$this->outcastGroups = array();
+		$outcastGroups = $array['outcastGroups'];
+		if( $outcastGroups ) {
+			$outcastGroup = $outcastGroups['outcastGroup'];
+			     if ( is_array(  $outcastGroup ) ) { $this->outcastGroups = $outcastGroup;        } 
+            else if ( is_string( $outcastGroup ) ) { $this->outcastGroups = array($outcastGroup); }
+		}
+        
+        
 	}
 }
