@@ -1,3 +1,4 @@
 /vendor
-test.php
 /composer.lock
+/.vagrant
+/Test_options.php
