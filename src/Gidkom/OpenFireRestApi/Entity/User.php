@@ -2,8 +2,9 @@
     
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class User implements \JsonSerializable
+class User extends OpenFireEntity
 {
+    /*
     private $username          = '';
     private $name              = '';
     private $email             = '';
@@ -39,4 +40,5 @@ class User implements \JsonSerializable
         $this->password        = $array['password'];
         $this->properties      = $array['properties'];
     }
+    */
 }

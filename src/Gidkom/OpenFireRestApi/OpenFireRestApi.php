@@ -48,11 +48,21 @@ class OpenFireRestApi
         $base = ($this->useSSL) ? "https" : "http";
         $url = $base . "://" . $this->host . ":" .$this->port.$this->plugin.$endpoint;
         $headers = array(
-            'Accept' => 'application/json',
-            'Authorization' => $this->secret
+            'Authorization' => $this->secret,
+            'Content-Type' => 'application/xml' 
         );
-
-        $body = json_encode($object);
+        
+        $body = '';
+        if($object !== NULL) {
+            $xmlBodyDom = new \DOMDocument(); 
+            $entityName = $object->openfireGetEntityName();
+            $xmlNewNode = $xmlBodyDom->createElement( $entityName );
+            $object->openfireSerialize($xmlNewNode);
+            $xmlBodyDom->appendChild($xmlNewNode);
+            $body = $xmlBodyDom->saveXml();
+            echo $body;
+        }
+        
         try
         {
             switch ($type) {
@@ -76,36 +86,51 @@ class OpenFireRestApi
                     break;
             }
         } catch ( \GuzzleHttp\Exception\ClientException $e ) {
+            
             if ( $e->getResponse()->getStatusCode() == 404 && $type === 'get' ) {
                 // Non existing GET is a success that returns null
                 return array('status'=>true, 'result'=>null, 'error'=>null);
             }
             // Every other error is unexpected
             throw $e;
+        } catch ( \GuzzleHttp\Exception\ServerException $e ) {
+            if ( $e->getResponse()->getStatusCode() == 500 && $type === 'get' ) {
+                // HACK : Bug when getting a chatroom, RESTAPI returns 500 instead of 404
+                // do that until it's fixed
+                return array('status'=>true, 'result'=>null, 'error'=>null);
+            }
+            // Every other error is unexpected
+            throw $e;
         }
         
-        if ($result->getStatusCode() == 200 || $result->getStatusCode() == 201) {
+        if(!$result)
+            return array('status'=>true, 'result'=>null, 'error'=>null);
             
+        if ($result->getStatusCode() == 200 || $result->getStatusCode() == 201) {
+            $body = $result->getBody();
             if($resultType) {
-                $result_array = json_decode($result->getBody(), TRUE);
+                $xmlDom = new \DOMDocument(); 
+                $xmlDom->loadXML( $body ); 
+                $xmlRoot = $xmlDom->firstChild;
+                
                 $result_objects = array();
                 if($resultIsArray) {
-                    foreach($result_array as $item) {
+                    foreach($xmlRoot->childNodes as $item) {
                         $newobject = new $resultType();
-                        $newobject->jsonDeserialize($item);
+                        $newobject->openfireDeserialize($item);
                         $result_objects[] = $newobject;
                     }
                 } else {
                     $newobject = new $resultType();
-                    $newobject->jsonDeserialize($result_array);
+                    $newobject->openfireDeserialize($xmlRoot);
                     $result_objects[] = $newobject;
                 }
                 return array('status'=>true, 'result'=>$result_objects, 'error'=>null);
             } else {
-                return array('status'=>true, 'result'=>json_decode($result->getBody()), 'error'=>null);
+                return array('status'=>true, 'result'=>$body, 'error'=>null);
             }
         }
-        return array('status'=>false, 'result'=>null, 'error'=>json_decode($result->getBody()));
+        return array('status'=>false, 'result'=>null, 'error'=>$body);
     }
     
     /**

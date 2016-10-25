@@ -2,6 +2,6 @@
     
 namespace Gidkom\OpenFireRestApi\Entity;
 
-class Session implements \JsonSerializable
+class Session extends OpenFireEntity
 {
 }
