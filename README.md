@@ -25,6 +25,7 @@ The easiest way to install is via [composer](http://getcomposer.org/). Create th
 ```
 
 ## USAGE
+### Initialisation
 ```php
 include "vendor/autoload.php";
 
@@ -40,7 +41,10 @@ $api->port = "9090";  // default 9090
 
 $api->useSSL = false;
 $api->plugin = "/plugins/restapi/v1";  // plugin 
+```
 
+### Adding a new user
+```php
 // Add a new user to OpenFire and add to a group
 $newUser = new Maniaplanet\OpenFireRestApi\Entity\;
 $newUser->username  = 'Username';
