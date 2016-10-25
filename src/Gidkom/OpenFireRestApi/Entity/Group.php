@@ -4,6 +4,8 @@ namespace Gidkom\OpenFireRestApi\Entity;
 
 class Group extends OpenFireEntity
 {
+    static $name = 'group';
+    
     static $properties = array(
         'name'                          => array( self::TYPE => self::TYPESTRING  , self::ISREQUIRED => true   , self::ISARRAY => false  )   ,
         'description'                   => array( self::TYPE => self::TYPESTRING  , self::ISREQUIRED => true   , self::ISARRAY => false  )   ,
