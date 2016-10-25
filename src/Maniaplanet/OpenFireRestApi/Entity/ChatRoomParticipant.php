@@ -1,12 +1,10 @@
 <?php
     
-namespace Gidkom\OpenFireRestApi\Entity;
+namespace Maniaplanet\OpenFireRestApi\Entity;
 
-use Gidkom\OpenFireRestApi\Entity\RosterItem;
-
-class Roster extends OpenFireEntity
+class ChatRoomParticipant extends OpenFireEntity
 {
-    static $name = 'roster';
+    static $name = 'participant';
     
     static $properties = array(
         'jid'                    => array( self::TYPE => self::TYPESTRING   , self::ISARRAY => false , self::ISREQUIRED => true   )   ,

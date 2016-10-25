@@ -3,7 +3,7 @@
     "description": "Manage Open fire server using Rest Api",
     "version": "1.0.0",
     "keywords": ["openfire", "xmpp", "chat"],
-    "homepage": "https://github.com/gidkom/php-openfire-restapi",
+    "homepage": "https://github.com/maniaplanet/php-openfire-restapi",
     "license": "MIT",
     "authors": [
         {

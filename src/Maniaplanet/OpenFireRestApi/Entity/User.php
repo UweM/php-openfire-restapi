@@ -1,6 +1,6 @@
 <?php
     
-namespace Gidkom\OpenFireRestApi\Entity;
+namespace Maniaplanet\OpenFireRestApi\Entity;
 
 class User extends OpenFireEntity
 {

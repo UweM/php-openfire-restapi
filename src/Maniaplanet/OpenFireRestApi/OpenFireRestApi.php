@@ -1,15 +1,15 @@
 <?php
     
-namespace Gidkom\OpenFireRestApi;
+namespace Maniaplanet\OpenFireRestApi;
 
 use GuzzleHttp\Client;
-use Gidkom\OpenFireRestApi\Entity\ChatRoom;
-use Gidkom\OpenFireRestApi\Entity\ChatRoomParticipant;
-use Gidkom\OpenFireRestApi\Entity\Group;
-use Gidkom\OpenFireRestApi\Entity\Roster;
-use Gidkom\OpenFireRestApi\Entity\RosterItem;
-use Gidkom\OpenFireRestApi\Entity\Session;
-use Gidkom\OpenFireRestApi\Entity\User;
+use Maniaplanet\OpenFireRestApi\Entity\ChatRoom;
+use Maniaplanet\OpenFireRestApi\Entity\ChatRoomParticipant;
+use Maniaplanet\OpenFireRestApi\Entity\Group;
+use Maniaplanet\OpenFireRestApi\Entity\Roster;
+use Maniaplanet\OpenFireRestApi\Entity\RosterItem;
+use Maniaplanet\OpenFireRestApi\Entity\Session;
+use Maniaplanet\OpenFireRestApi\Entity\User;
 
 class OpenFireRestApi
 {
