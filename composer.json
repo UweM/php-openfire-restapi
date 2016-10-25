@@ -1,5 +1,5 @@
 {
-    "name": "gidkom/php-openfire-restapi",
+    "name": "maniaplanet/php-openfire-restapi",
     "description": "Manage Open fire server using Rest Api",
     "version": "1.0.0",
     "keywords": ["openfire", "xmpp", "chat"],
@@ -12,12 +12,12 @@
         },
         {
             "name": "Sylvain Guglielmi",
-            "email": "phpopenfirerestapi@gugli.me"
+            "email": "sylvain@nadeo.com"
         }
     ],
     "support": {
-        "email": "yoroumah@gmail.com",
-        "issues": "https://github.com/gidkom/php-openfire-restapi/issues"
+        "email": "sylvain@nadeo.com",
+        "issues": "https://github.com/maniaplanet/php-openfire-restapi/issues"
     },
     "require": {
         "php": ">=5.4.0",
@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Gidkom\\OpenFireRestApi": "src/"
+            "Maniaplanet\\OpenFireRestApi": "src/"
         }
     },
     "minimum-stability": "dev"
