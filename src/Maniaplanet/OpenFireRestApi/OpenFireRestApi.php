@@ -372,10 +372,15 @@ class OpenFireRestApi
      * @param   int|false       $subscription   Subscription (Optional)
      * @return  array                           Array containing 'status' (true on success) and 'result' the answers as an array of objects and 'error' the error as an array
      */
-    public function addToRoster($username, $jid, $name=false, $subscription=false)
+    public function addToRoster($username, $jid, $name=false, $subscription=false, $groups=false)
     {
         $endpoint = '/users/'.$username.'/roster';
-        return $this->doRequest('post', $endpoint, NULL, compact('jid','name','subscription'));
+        $obj = new RosterItem();
+        $obj->jid = $jid;
+        if($name) $obj->nickname = $name;
+        if($subscription) $obj->subscriptionType = $subscription;
+        if($groups) $obj->groups = $groups;
+        return $this->doRequest('post', $endpoint, '', FALSE, $obj);
     }
 
 
