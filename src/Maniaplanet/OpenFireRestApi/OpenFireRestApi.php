@@ -60,7 +60,6 @@ class OpenFireRestApi
             $object->openfireSerialize($xmlNewNode);
             $xmlBodyDom->appendChild($xmlNewNode);
             $body = $xmlBodyDom->saveXml();
-            echo $body;
         }
         
         try
